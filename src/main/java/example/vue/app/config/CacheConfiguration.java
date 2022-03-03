@@ -48,6 +48,7 @@ public class CacheConfiguration {
             createCache(cm, example.vue.app.domain.User.class.getName());
             createCache(cm, example.vue.app.domain.Authority.class.getName());
             createCache(cm, example.vue.app.domain.User.class.getName() + ".authorities");
+            createCache(cm, example.vue.app.domain.Product.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,0 +1,34 @@
+{
+  "exampleVueApp": {
+    "product": {
+      "home": {
+        "title": "Product",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Dodaj Product",
+        "createOrEditLabel": "Dodaj lub edytuj: Product",
+        "notFound": "No Products found"
+      },
+      "created": "Utworzono nowy obiekt typu Product z identyfikatorem {{ param }}",
+      "updated": "Uaktualniono obiekt typu Product z identyfikatorem {{ param }}",
+      "deleted": "Usunięto obiekt typu Product z identyfikatorem {{ param }}",
+      "delete": {
+        "question": "Czy na pewno chcesz usunąć Product {{ id }}?"
+      },
+      "detail": {
+        "title": "Product"
+      },
+      "id": "ID",
+      "productCategoryEnum": "Product Category Enum",
+      "name": "Name",
+      "quantity": "Quantity",
+      "priceNet": "Price Net",
+      "vat": "Vat",
+      "priceGross": "Price Gross",
+      "stock": "Stock",
+      "description": "Description",
+      "createTime": "Create Time",
+      "updateTime": "Update Time",
+      "image": "Image"
+    }
+  }
+}

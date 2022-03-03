@@ -1,0 +1,9 @@
+{
+  "exampleVueApp": {
+    "ProductCategoryEnum": {
+      "null": "",
+      "Vitamins": "Vitamins",
+      "Minerals": "Minerals"
+    }
+  }
+}

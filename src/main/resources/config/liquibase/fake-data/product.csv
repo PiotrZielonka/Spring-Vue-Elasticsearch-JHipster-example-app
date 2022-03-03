@@ -1,0 +1,11 @@
+id;product_category_enum;name;quantity;price_net;vat;price_gross;stock;description;create_time;update_time;image;image_content_type
+1;Vitamins;Account;53676;314855;99;82284;742116;../fake-data/blob/hipster.txt;2022-03-02T23:27:55;2022-03-02T17:44:19;../fake-data/blob/hipster.png;image/png
+2;Vitamins;Principal;35091;347904;82;69097;163163;../fake-data/blob/hipster.txt;2022-03-03T10:54:56;2022-03-02T18:57:37;../fake-data/blob/hipster.png;image/png
+3;Minerals;Dynamic Pound withdrawal;88209;649644;12;93728;445739;../fake-data/blob/hipster.txt;2022-03-03T11:44:02;2022-03-03T10:04:32;../fake-data/blob/hipster.png;image/png
+4;Vitamins;Kina navigating;57853;432916;14;32061;947079;../fake-data/blob/hipster.txt;2022-03-03T00:06:59;2022-03-03T02:05:20;../fake-data/blob/hipster.png;image/png
+5;Minerals;compressing withdrawal green;70316;512175;22;32770;542785;../fake-data/blob/hipster.txt;2022-03-03T01:42:39;2022-03-03T09:16:16;../fake-data/blob/hipster.png;image/png
+6;Vitamins;Small digital Oklahoma;37638;205200;33;94292;95488;../fake-data/blob/hipster.txt;2022-03-03T02:07:50;2022-03-02T14:26:39;../fake-data/blob/hipster.png;image/png
+7;Minerals;distributed indigo JSON;55869;614828;95;20809;120929;../fake-data/blob/hipster.txt;2022-03-03T11:59:29;2022-03-03T00:05:50;../fake-data/blob/hipster.png;image/png
+8;Vitamins;intangible Prairie;14557;634538;88;17814;969209;../fake-data/blob/hipster.txt;2022-03-03T09:30:36;2022-03-03T07:51:13;../fake-data/blob/hipster.png;image/png
+9;Vitamins;Tunnel;5902;87235;24;26845;882929;../fake-data/blob/hipster.txt;2022-03-02T20:00:03;2022-03-02T22:18:33;../fake-data/blob/hipster.png;image/png
+10;Vitamins;Account;68319;169343;80;33734;990015;../fake-data/blob/hipster.txt;2022-03-02T18:30:45;2022-03-02T23:20:17;../fake-data/blob/hipster.png;image/png
