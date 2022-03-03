@@ -2,33 +2,33 @@
   "exampleVueApp": {
     "product": {
       "home": {
-        "title": "Product",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Dodaj Product",
-        "createOrEditLabel": "Dodaj lub edytuj: Product",
-        "notFound": "No Products found"
+        "title": "Produkty",
+        "refreshListLabel": "Odśwież liste",
+        "createLabel": "Dodaj Produkt",
+        "createOrEditLabel": "Dodaj lub edytuj: Produkt",
+        "notFound": "Nie znaleziono żadnych produktów"
       },
-      "created": "Utworzono nowy obiekt typu Product z identyfikatorem {{ param }}",
-      "updated": "Uaktualniono obiekt typu Product z identyfikatorem {{ param }}",
-      "deleted": "Usunięto obiekt typu Product z identyfikatorem {{ param }}",
+      "created": "Utworzono nowy obiekt typu Produkt z identyfikatorem {{ param }}",
+      "updated": "Uaktualniono obiekt typu Produkt z identyfikatorem {{ param }}",
+      "deleted": "Usunięto obiekt typu Produkt z identyfikatorem {{ param }}",
       "delete": {
-        "question": "Czy na pewno chcesz usunąć Product {{ id }}?"
+        "question": "Czy na pewno chcesz usunąć Produkt {{ id }}?"
       },
       "detail": {
-        "title": "Product"
+        "title": "Produkt"
       },
       "id": "ID",
-      "productCategoryEnum": "Product Category Enum",
-      "name": "Name",
-      "quantity": "Quantity",
-      "priceNet": "Price Net",
+      "productCategoryEnum": "Kategoria",
+      "name": "Nazwa",
+      "quantity": "Ilość",
+      "priceNet": "Cena netto",
       "vat": "Vat",
-      "priceGross": "Price Gross",
-      "stock": "Stock",
-      "description": "Description",
-      "createTime": "Create Time",
-      "updateTime": "Update Time",
-      "image": "Image"
+      "priceGross": "Cena brutto",
+      "stock": "Ilość na magazynie",
+      "description": "Opis",
+      "createTime": "Utworzono",
+      "updateTime": "Dodano",
+      "image": "Zdjęcie"
     }
   }
 }

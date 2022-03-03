@@ -18,7 +18,7 @@
         "title": "Product"
       },
       "id": "ID",
-      "productCategoryEnum": "Product Category Enum",
+      "productCategoryEnum": "Category",
       "name": "Name",
       "quantity": "Quantity",
       "priceNet": "Price Net",

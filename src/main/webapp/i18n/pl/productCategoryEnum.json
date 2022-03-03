@@ -2,8 +2,8 @@
   "exampleVueApp": {
     "ProductCategoryEnum": {
       "null": "",
-      "Vitamins": "Vitamins",
-      "Minerals": "Minerals"
+      "Vitamins": "Witaminy",
+      "Minerals": "Minerały"
     }
   }
 }
