@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import example.vue.app.IntegrationTest;
 import example.vue.app.domain.User;
 import example.vue.app.repository.UserRepository;
+import example.vue.app.repository.search.UserSearchRepository;
 import example.vue.app.security.AuthoritiesConstants;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,14 @@ class PublicUserResourceIT {
 
     @Autowired
     private UserRepository userRepository;
+
+    /**
+     * This repository is mocked in the example.vue.app.repository.search test package.
+     *
+     * @see example.vue.app.repository.search.UserSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
 
     @Autowired
     private EntityManager em;

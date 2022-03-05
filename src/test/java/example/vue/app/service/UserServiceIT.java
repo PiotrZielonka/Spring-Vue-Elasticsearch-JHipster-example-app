@@ -1,12 +1,16 @@
 package example.vue.app.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import example.vue.app.IntegrationTest;
 import example.vue.app.config.Constants;
 import example.vue.app.domain.User;
 import example.vue.app.repository.UserRepository;
+import example.vue.app.repository.search.UserSearchRepository;
 import example.vue.app.service.dto.AdminUserDTO;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -49,6 +53,14 @@ class UserServiceIT {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * This repository is mocked in the example.vue.app.repository.search test package.
+     *
+     * @see example.vue.app.repository.search.UserSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
 
     @Autowired
     private AuditingHandler auditingHandler;
@@ -164,6 +176,9 @@ class UserServiceIT {
         userService.removeNotActivatedUsers();
         users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
         assertThat(users).isEmpty();
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, times(1)).delete(user);
     }
 
     @Test
@@ -181,5 +196,8 @@ class UserServiceIT {
         userService.removeNotActivatedUsers();
         Optional<User> maybeDbUser = userRepository.findById(dbUser.getId());
         assertThat(maybeDbUser).contains(dbUser);
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, never()).delete(user);
     }
 }
