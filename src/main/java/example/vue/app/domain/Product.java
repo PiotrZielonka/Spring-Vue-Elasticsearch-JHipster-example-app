@@ -25,6 +25,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "product")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "product")
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -280,9 +281,9 @@ public class Product implements Serializable {
     }
 
     // prettier-ignore
-  @Override
-  public String toString() {
-    return "Product{"
+    @Override
+    public String toString() {
+        return "Product{"
         + "id=" + getId()
         + ", productCategoryEnum='" + getProductCategoryEnum() + "'"
         + ", name='" + getName() + "'"
@@ -296,5 +297,5 @@ public class Product implements Serializable {
         + ", updateTime='" + getUpdateTime() + "'"
         + ", image='" + getImage() + "'"
         + "}";
-  }
+    }
 }

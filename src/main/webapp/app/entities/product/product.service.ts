@@ -5,8 +5,22 @@ import buildPaginationQueryOpts from '@/shared/sort/sorts';
 import { IProduct } from '@/shared/model/product.model';
 
 const baseApiUrl = 'api/products';
+const baseSearchApiUrl = 'api/_search/products?query=';
 
 export default class ProductService {
+  public search(query, paginationQuery): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`)
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
   public find(id: number): Promise<IProduct> {
     return new Promise<IProduct>((resolve, reject) => {
       axios

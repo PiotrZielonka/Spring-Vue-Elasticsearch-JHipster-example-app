@@ -3,6 +3,7 @@ package example.vue.app.web.rest;
 import static example.vue.app.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -16,19 +17,26 @@ import example.vue.app.IntegrationTest;
 import example.vue.app.domain.Product;
 import example.vue.app.domain.enumeration.ProductCategoryEnum;
 import example.vue.app.repository.ProductRepository;
+import example.vue.app.repository.search.ProductSearchRepository;
 import example.vue.app.service.dto.ProductDTO;
 import example.vue.app.service.mapper.ProductMapper;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class ProductResourceIT {
@@ -77,6 +86,7 @@ class ProductResourceIT {
 
     private static final String ENTITY_API_URL = "/api/products";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/products";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -86,6 +96,9 @@ class ProductResourceIT {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ProductSearchRepository mockProductSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -160,6 +173,9 @@ class ProductResourceIT {
         assertThat(testProduct.getUpdateTime()).isEqualTo(DEFAULT_UPDATE_TIME);
         assertThat(testProduct.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testProduct.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(1)).save(testProduct);
     }
 
     @Test
@@ -179,6 +195,9 @@ class ProductResourceIT {
         // Validate the Product in the database
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeCreate);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(0)).save(product);
     }
 
     @Test
@@ -381,6 +400,9 @@ class ProductResourceIT {
         assertThat(testProduct.getUpdateTime()).isEqualTo(UPDATED_UPDATE_TIME);
         assertThat(testProduct.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testProduct.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository).save(testProduct);
     }
 
     @Test
@@ -404,6 +426,9 @@ class ProductResourceIT {
         // Validate the Product in the database
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(0)).save(product);
     }
 
     @Test
@@ -427,6 +452,9 @@ class ProductResourceIT {
         // Validate the Product in the database
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(0)).save(product);
     }
 
     @Test
@@ -446,6 +474,9 @@ class ProductResourceIT {
         // Validate the Product in the database
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(0)).save(product);
     }
 
     @Test
@@ -565,6 +596,9 @@ class ProductResourceIT {
         // Validate the Product in the database
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(0)).save(product);
     }
 
     @Test
@@ -588,6 +622,9 @@ class ProductResourceIT {
         // Validate the Product in the database
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(0)).save(product);
     }
 
     @Test
@@ -609,6 +646,9 @@ class ProductResourceIT {
         // Validate the Product in the database
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(0)).save(product);
     }
 
     @Test
@@ -627,5 +667,37 @@ class ProductResourceIT {
         // Validate the database contains one less item
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeDelete - 1);
+
+        // Validate the Product in Elasticsearch
+        verify(mockProductSearchRepository, times(1)).deleteById(product.getId());
+    }
+
+    @Test
+    @Transactional
+    void searchProduct() throws Exception {
+        // Configure the mock search repository
+        // Initialize the database
+        productRepository.saveAndFlush(product);
+        when(mockProductSearchRepository.search("id:" + product.getId(), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(product), PageRequest.of(0, 1), 1));
+
+        // Search the product
+        restProductMockMvc
+            .perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + product.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())))
+            .andExpect(jsonPath("$.[*].productCategoryEnum").value(hasItem(DEFAULT_PRODUCT_CATEGORY_ENUM.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(sameNumber(DEFAULT_QUANTITY))))
+            .andExpect(jsonPath("$.[*].priceNet").value(hasItem(sameNumber(DEFAULT_PRICE_NET))))
+            .andExpect(jsonPath("$.[*].vat").value(hasItem(sameNumber(DEFAULT_VAT))))
+            .andExpect(jsonPath("$.[*].priceGross").value(hasItem(sameNumber(DEFAULT_PRICE_GROSS))))
+            .andExpect(jsonPath("$.[*].stock").value(hasItem(sameNumber(DEFAULT_STOCK))))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].createTime").value(hasItem(DEFAULT_CREATE_TIME.toString())))
+            .andExpect(jsonPath("$.[*].updateTime").value(hasItem(DEFAULT_UPDATE_TIME.toString())))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
     }
 }

@@ -2,6 +2,7 @@ package example.vue.app.service.impl;
 
 import example.vue.app.domain.Product;
 import example.vue.app.repository.ProductRepository;
+import example.vue.app.repository.search.ProductSearchRepository;
 import example.vue.app.service.ProductService;
 import example.vue.app.service.dto.ProductDTO;
 import example.vue.app.service.mapper.ProductMapper;
@@ -22,9 +23,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productMapper;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
+    private final ProductSearchRepository productSearchRepository;
+
+    public ProductServiceImpl(
+        ProductRepository productRepository,
+        ProductMapper productMapper,
+        ProductSearchRepository productSearchRepository
+    ) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.productSearchRepository = productSearchRepository;
     }
 
     @Override
@@ -33,7 +41,9 @@ public class ProductServiceImpl implements ProductService {
         log.debug("Request to save Product : {}", productDto);
         Product product = productMapper.toEntity(productDto);
         product = productRepository.save(product);
-        return productMapper.toDto(product);
+        ProductDTO result = productMapper.toDto(product);
+        productSearchRepository.save(product);
+        return result;
     }
 
     @Override
@@ -49,6 +59,11 @@ public class ProductServiceImpl implements ProductService {
                 return existingProduct;
             })
             .map(productRepository::save)
+            .map(savedProduct -> {
+                productSearchRepository.save(savedProduct);
+
+                return savedProduct;
+            })
             .map(productMapper::toDto);
     }
 
@@ -71,5 +86,13 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         log.debug("Request to delete Product : {}", id);
         productRepository.deleteById(id);
+        productSearchRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Products for query {}", query);
+        return productSearchRepository.search(query, pageable).map(productMapper::toDto);
     }
 }

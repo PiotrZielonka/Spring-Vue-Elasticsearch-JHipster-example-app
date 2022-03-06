@@ -6,6 +6,7 @@
         "refreshListLabel": "Odśwież liste",
         "createLabel": "Dodaj Produkt",
         "createOrEditLabel": "Dodaj lub edytuj: Produkt",
+        "search": "Wyszukaj Product",
         "notFound": "Nie znaleziono żadnych produktów"
       },
       "created": "Utworzono nowy obiekt typu Produkt z identyfikatorem {{ param }}",

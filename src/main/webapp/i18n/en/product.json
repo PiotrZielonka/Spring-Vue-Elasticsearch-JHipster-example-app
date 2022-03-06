@@ -6,6 +6,7 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Product",
         "createOrEditLabel": "Create or edit a Product",
+        "search": "Search for Product",
         "notFound": "No Products found"
       },
       "created": "A new Product is created with identifier {{ param }}",

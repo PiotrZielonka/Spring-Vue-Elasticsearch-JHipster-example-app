@@ -15,4 +15,6 @@ public interface ProductService {
     Optional<ProductDTO> findOne(Long id);
 
     void delete(Long id);
+
+    Page<ProductDTO> search(String query, Pageable pageable);
 }

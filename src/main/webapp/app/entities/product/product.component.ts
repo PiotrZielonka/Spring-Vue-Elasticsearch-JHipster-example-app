@@ -15,6 +15,7 @@ export default class Product extends mixins(JhiDataUtils) {
   @Inject('productService') private productService: () => ProductService;
   @Inject('alertService') private alertService: () => AlertService;
 
+  public currentSearch = '';
   private removeId: number = null;
   public itemsPerPage = 20;
   public queryCount: number = null;
@@ -32,7 +33,16 @@ export default class Product extends mixins(JhiDataUtils) {
     this.retrieveAllProducts();
   }
 
+  public search(query): void {
+    if (!query) {
+      return this.clear();
+    }
+    this.currentSearch = query;
+    this.retrieveAllProducts();
+  }
+
   public clear(): void {
+    this.currentSearch = '';
     this.page = 1;
     this.retrieveAllProducts();
   }
@@ -44,6 +54,23 @@ export default class Product extends mixins(JhiDataUtils) {
       size: this.itemsPerPage,
       sort: this.sort(),
     };
+    if (this.currentSearch) {
+      this.productService()
+        .search(this.currentSearch, paginationQuery)
+        .then(
+          res => {
+            this.products = res.data;
+            this.totalItems = Number(res.headers['x-total-count']);
+            this.queryCount = this.totalItems;
+            this.isFetching = false;
+          },
+          err => {
+            this.isFetching = false;
+            this.alertService().showHttpError(this, err.response);
+          }
+        );
+      return;
+    }
     this.productService()
       .retrieve(paginationQuery)
       .then(
